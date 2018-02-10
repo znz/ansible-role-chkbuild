@@ -1,0 +1,11 @@
+[Unit]
+Description=chkbuild
+[Service]
+Type=oneshot
+ExecStart=/home/{{ chkbuild_owner }}/chkbuild/start-build
+WorkingDirectory=/home/{{ chkbuild_owner }}/chkbuild
+User=chkbuild
+Group=chkbuild
+OOMScoreAdjust=900
+PrivateTmp=true
+CPUQuota=90%

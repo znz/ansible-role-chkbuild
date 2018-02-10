@@ -1,0 +1,59 @@
+---
+# tasks file for ansible-role-chkbuild
+
+# Add users
+- name: "Add chkbuild_owner user"
+  user:
+    name: "{{ chkbuild_owner }}"
+- name: "Add chkbuild user"
+  user:
+    name: "chkbuild"
+    createhome: no
+    shell: /usr/bin/nologin
+
+# Create directories
+- name: "Create /home/chkbuild"
+  file:
+    path: "/home/chkbuild"
+    state: directory
+    owner: "{{ chkbuild_owner }}"
+    group: "chkbuild"
+    mode: 02755
+- name: "Create /home/chkbuild/build"
+  file:
+    path: "/home/chkbuild/build"
+    state: directory
+    owner: "{{ chkbuild_owner }}"
+    group: "chkbuild"
+    mode: 02775
+- name: "Create /home/chkbuild/public_html"
+  file:
+    path: "/home/chkbuild/public_html"
+    state: directory
+    owner: "{{ chkbuild_owner }}"
+    group: "chkbuild"
+    mode: 02775
+- name: "Clone chkbuild"
+  git:
+    repo: "https://github.com/ruby/chkbuild"
+    dest: "/home/{{ chkbuild_owner }}/chkbuild"
+    depth: 1
+- file:
+    src: "/home/chkbuild"
+    dest: "/home/{{ chkbuild_owner }}/chkbuild/tmp"
+    owner: "{{ chkbuild_owner }}"
+    group: "{{ chkbuild_owner }}"
+    state: link
+
+# Install units
+- name: "Install local-chkbuild timer"
+  template:
+    src: "{{ item }}.j2"
+    dest: "/etc/systemd/system/{{ item }}"
+    owner: root
+    group: root
+    mode: 0644
+  notify: Enable a timer for local-chkbuild
+  with_items:
+  - "local-chkbuild.service"
+  - "local-chkbuild.timer"

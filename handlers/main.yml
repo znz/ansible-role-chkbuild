@@ -1,0 +1,8 @@
+---
+# handlers file for ansible-role-chkbuild
+- name: Enable a timer for local-chkbuild
+  systemd:
+    name: local-chkbuild.timer
+    state: started
+    enabled: yes
+    daemon_reload: yes
