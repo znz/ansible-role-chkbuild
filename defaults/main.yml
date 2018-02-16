@@ -2,3 +2,5 @@
 # defaults file for ansible-role-chkbuild
 chkbuild_owner: "chkbuild-owner"
 chkbuild_timer: "OnCalendar=*-*-* 00,12:00:00"
+chkbuild_resource_control: |
+  CPUQuota=90%
