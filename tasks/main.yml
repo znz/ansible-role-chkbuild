@@ -42,7 +42,7 @@
     src: "/home/chkbuild"
     dest: "/home/{{ chkbuild_owner }}/chkbuild/tmp"
     owner: "{{ chkbuild_owner }}"
-    group: "{{ chkbuild_owner }}"
+    group: "chkbuild"
     state: link
 
 # Install units
